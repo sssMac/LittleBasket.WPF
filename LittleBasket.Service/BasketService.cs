@@ -76,7 +76,7 @@ namespace LittleBasket.Service
 
         public async Task ChangeVisibility(Guid productId, bool isVisible)
         {
-            var product = await _unitOfWork.ProductRepository.GetByID(productId);
+            var product = (await _unitOfWork.ProductRepository.Get(x => x.Id == productId)).First();
             if (product != null)
             {
                 product.IsVisible = isVisible;

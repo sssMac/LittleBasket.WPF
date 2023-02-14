@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LittleBasket.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230210094630_Init")]
-    partial class Init
+    [Migration("20230214071227_InitMigrate")]
+    partial class InitMigrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,49 +82,49 @@ namespace LittleBasket.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0e6603ad-9296-4f3e-8fcb-bce88c58871f"),
-                            IsVisible = false,
+                            Id = new Guid("4bad619f-6424-4b52-9803-0bddbb511606"),
+                            IsVisible = true,
                             Name = "Молоко"
                         },
                         new
                         {
-                            Id = new Guid("0dce9faf-322d-4d86-b737-70515b3aff22"),
-                            IsVisible = false,
+                            Id = new Guid("075c8879-2da9-4be8-9e1b-14ca3899c3db"),
+                            IsVisible = true,
                             Name = "Хлеб"
                         },
                         new
                         {
-                            Id = new Guid("19d2459c-85f4-49b2-b251-c8ce88437ff6"),
-                            IsVisible = false,
+                            Id = new Guid("9ada0269-4ba4-48cb-9228-c15785ecd7c6"),
+                            IsVisible = true,
                             Name = "Мясо"
                         },
                         new
                         {
-                            Id = new Guid("2c1f9af4-6eeb-404f-b148-984d8faa6f48"),
-                            IsVisible = false,
+                            Id = new Guid("2c97c485-d08c-4284-8272-0560c1195c94"),
+                            IsVisible = true,
                             Name = "Масло"
                         },
                         new
                         {
-                            Id = new Guid("1355dab6-9150-439a-a7dd-771c00b108ef"),
-                            IsVisible = false,
+                            Id = new Guid("b56e06a3-69ed-4376-8fb6-9b0a31f23fbd"),
+                            IsVisible = true,
                             Name = "Арбуз"
                         },
                         new
                         {
-                            Id = new Guid("4083bbc6-bad7-41dd-84b9-be5f9a72a376"),
+                            Id = new Guid("8ed3f4a4-97d1-438c-adbf-ab3d67596be5"),
                             IsVisible = false,
                             Name = "Колбаса"
                         },
                         new
                         {
-                            Id = new Guid("85e7ec78-dc31-476c-9d39-da8df51e7935"),
+                            Id = new Guid("7084ff33-0f61-4ecb-9002-09cba3099bdc"),
                             IsVisible = false,
                             Name = "Сыр"
                         },
                         new
                         {
-                            Id = new Guid("f2e8609e-4ee3-4bbd-9e89-b46f51732a8a"),
+                            Id = new Guid("69d4ed6d-6e84-4516-8313-362c5a383622"),
                             IsVisible = false,
                             Name = "Печенье"
                         });

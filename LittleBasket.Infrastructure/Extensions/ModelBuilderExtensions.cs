@@ -19,9 +19,9 @@ namespace LittleBasket.Infrastructure.Extensions
                 new Product {Id = Guid.NewGuid(), Name = "Мясо", IsVisible = true},
                 new Product {Id = Guid.NewGuid(), Name = "Масло", IsVisible = true},
                 new Product {Id = Guid.NewGuid(), Name = "Арбуз", IsVisible = true},
-                new Product {Id = Guid.NewGuid(), Name = "Колбаса"},
-                new Product {Id = Guid.NewGuid(), Name = "Сыр"},
-                new Product {Id = Guid.NewGuid(), Name = "Печенье"},
+                new Product {Id = Guid.NewGuid(), Name = "Колбаса", IsVisible = false},
+                new Product {Id = Guid.NewGuid(), Name = "Сыр", IsVisible = false},
+                new Product {Id = Guid.NewGuid(), Name = "Печенье", IsVisible = false},
             };
             builder.Entity<Product>().HasData(products);
         }
