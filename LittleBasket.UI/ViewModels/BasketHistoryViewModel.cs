@@ -15,14 +15,19 @@ using System.Windows.Media.Animation;
 
 namespace LittleBasket.UI.ViewModels
 {
-    public class BasketHistoryViewModel : ViewModelBase
+	//Класс отвечающий за общий вид блока историй
+	//DataContext для компонента BasketHistory
+	public class BasketHistoryViewModel : ViewModelBase
     {
+        //Хранилища текущей покупки и историй
         private readonly BasketBuyStore _basketBuyStore;
         private readonly BasketHistoryStore _basketHistoryStore;
 
+        //Колекция историй
         private readonly ObservableCollection<BasketHistoryItemViewModel> _basketHistoryItemViewModels;
         public IEnumerable<BasketHistoryItemViewModel> BasketHistoryItemViewModels => _basketHistoryItemViewModels;
 
+        //Команда активации новой покупки
         public ICommand NewBuyCommand { get; }
         public BasketHistoryViewModel(BasketBuyStore basketBuyStore, BasketHistoryStore basketHistoryStore)
         {
@@ -32,12 +37,14 @@ namespace LittleBasket.UI.ViewModels
             _basketHistoryItemViewModels = new ObservableCollection<BasketHistoryItemViewModel>();
             NewBuyCommand = new NewBuyCommand(basketBuyStore);
 
+            //Подписки
             _basketHistoryStore.BasketHistoryLoaded += OnHistoryLoaded;
             _basketBuyStore.BasketCheckSave += OnAddedToHistory;
 
         }
 
-        private void OnAddedToHistory(List<Check> cheks)
+		//Ивент-подписка: добавление в историю новой сохраненой покупки
+		private void OnAddedToHistory(List<Check> cheks)
         {
 
             _basketHistoryItemViewModels.Insert(0, new BasketHistoryItemViewModel(new History
@@ -48,6 +55,7 @@ namespace LittleBasket.UI.ViewModels
             }));
         }
 
+        //Ивент-подписка: загрузка истории из бд
         private void OnHistoryLoaded()
         {
             _basketHistoryItemViewModels.Clear();
@@ -59,6 +67,8 @@ namespace LittleBasket.UI.ViewModels
             }
  
         }
+
+        //Отписка от событий
         protected override void Dispose()
         {
             _basketHistoryStore.BasketHistoryLoaded -= OnHistoryLoaded;
@@ -76,8 +86,6 @@ namespace LittleBasket.UI.ViewModels
             });
             return res;
         }
-
-
 
     }
 }

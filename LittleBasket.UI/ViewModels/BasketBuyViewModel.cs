@@ -13,11 +13,15 @@ using System.Windows.Input;
 
 namespace LittleBasket.UI.ViewModels
 {
+    //Класс содержит в себе основной дата контекст для компонента BasketBuy
+    //Хранит лист из элементов текущей покупки
     public class BasketBuyViewModel : ViewModelBase
     {
+        //Хранилища продуктов и текущей покупки
         private readonly BasketProductStore _basketProductStore;
         private readonly BasketBuyStore _basketBuyStore;
 
+        //Дата для UI
         private DateTime _checkDate;
         public DateTime CheckDate
         {
@@ -25,11 +29,15 @@ namespace LittleBasket.UI.ViewModels
             set { _checkDate = value; }
         }
 
+        //Лист текущей покупки
         private readonly ObservableCollection<BasketBuyItemViewModel> _basketBuyItemViewModels;
         public IEnumerable<BasketBuyItemViewModel> BasketBuyItemViewModels => _basketBuyItemViewModels;
+
+        //Команды для удаления и сохрания покупки в историю
         public ICommand DeleteAllCheckCommand { get; }
         public ICommand SaveCheckToHistoryCommand { get; }
 
+        //Проверка на активность текущей покупки, не активна = нельзя добавлять продукты
         private bool _isActiveBuy;
         public bool IsActiveBuy
         {
@@ -51,6 +59,7 @@ namespace LittleBasket.UI.ViewModels
             DeleteAllCheckCommand = new DeleteFromBasketCommand(basketBuyStore);
             SaveCheckToHistoryCommand = new SaveCheckToHistoryCommand(basketBuyStore, _basketBuyItemViewModels);
 
+            //Подписки на события
             _basketProductStore.ProductAddedToBasket += OnProductAddedToBasket;
             _basketBuyStore.CheckUpdated += OnCheckUpdated;
             _basketBuyStore.BasketCheckItemDeleted += OnBasketCheckItemDeleted;
@@ -59,11 +68,15 @@ namespace LittleBasket.UI.ViewModels
             _basketBuyStore.IsActiveChanged += OnActiveChanged;
 
         }
+
+        //Ивент-подписка: активация покупки
         private void OnActiveChanged(bool obj)
         {
             _isActiveBuy = obj;
             OnPropertyChanged(nameof(IsActiveBuy));
         }
+
+        //Ивент-подписка: обновление полей при изменении элементов списка покупки
         private void OnCheckUpdated(Check obj)
         {
             BasketBuyItemViewModel basketBuyItemViewModels =
@@ -75,17 +88,20 @@ namespace LittleBasket.UI.ViewModels
             };
         }
 
+        //Ивент-подписка: сброс текущей покупки
         private void OnBasketCheckReset()
         {
             _basketBuyItemViewModels.Clear();
         }
 
+        //Ивент-подписка: удаление продукта из списка покупки
         private void OnBasketCheckItemDeleted(Check check)
         {
             var obj = _basketBuyItemViewModels.FirstOrDefault(c => c.ProductId== check.ProductId);
             _basketBuyItemViewModels.Remove(obj);
         }
 
+        //Ивент-подписка: добавление продукта в корзину
         private void OnProductAddedToBasket(Product product)
         {
             if (product != null)
@@ -108,6 +124,8 @@ namespace LittleBasket.UI.ViewModels
                 });
             }
         }
+
+        //Отписка от событий
         protected override void Dispose()
         {
             _basketProductStore.ProductAddedToBasket -= OnProductAddedToBasket;

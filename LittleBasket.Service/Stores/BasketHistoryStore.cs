@@ -10,15 +10,21 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Service.Stores
 {
+    //Хранилище для общего доступа к истории покупок
     public class BasketHistoryStore
     {
-        private readonly IBasketService _basketService; 
+        //Использует хранилище текущей покупки
         private readonly BasketBuyStore _basketBuyStore;
+
+        //Сервис для взаимодействия с бд, и маппер  
+        private readonly IBasketService _basketService; 
         private readonly IMapper _mapper;
 
+        //Коллекция истории покупок
         private List<History>? _history;
         public IEnumerable<History>? History => _history;
 
+        //Ивент, вызов которого загрузит историю из бд
         public event Action BasketHistoryLoaded;
         public BasketHistoryStore(
             BasketBuyStore basketBuyStore, 
@@ -31,10 +37,11 @@ namespace LittleBasket.Service.Stores
 
             _history = new List<History>();
 
-            _basketBuyStore.BasketCheckSave += BasketBuyStore_BasketCheckSave;
+            _basketBuyStore.BasketCheckSave += OnBasketCheckSave;
         }
 
 
+        //М
         public async Task Load()
         {
             IEnumerable<History> history =
@@ -46,7 +53,7 @@ namespace LittleBasket.Service.Stores
             BasketHistoryLoaded?.Invoke();
         }
 
-        public async void BasketBuyStore_BasketCheckSave(List<Check> cheks)
+        public async void OnBasketCheckSave(List<Check> cheks)
         {
             var sum = Sum(cheks);
 

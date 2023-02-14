@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.ViewModels
 {
-    public class BasketProductListItemViewModel : ViewModelBase
-    {
+	//Класс отвечабщий за элемент из списка продуктов
+	//DataContext для компонента BasketProductListItem
+	public class BasketProductListItemViewModel : ViewModelBase
+	{
+        //Модель продукта на UI
         public Product Product { get; set; }
         public string ProductName => Product.Name;
         public bool IsVisible => Product.IsVisible;

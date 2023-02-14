@@ -10,14 +10,20 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Service.Stores
 {
+    //Общее хранилище продуктов
     public class BasketProductStore
     {
+        //Сервис для управления бд и маппер
         private readonly IBasketService _basketService;
         private readonly IMapper _mapper;
-        private readonly IUpdateCommand<Product> _updateCommand;
+
+        //Коллекция продуктов
         private readonly List<Product> _products;
         public IEnumerable<Product> Products => _products;
 
+        //Блок ивентов ->
+        //загрузку продуктов из бд, добавления продукта в корзину,
+        //обновление полей продукта, добавление нового продукта
         public event Action BasketProductsLoaded;
         public event Action<Product> ProductAddedToBasket;
         public event Action<Product> BasketProductUpdated;
@@ -32,6 +38,8 @@ namespace LittleBasket.Service.Stores
             _products = new List<Product>();
         }
 
+        //Блок методов которые тригирят ивенты
+        //Вызываются из команд
         public async Task Load()
         {
             IEnumerable<Product> products =

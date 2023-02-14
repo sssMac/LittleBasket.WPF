@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Domain.Models
 {
-    public class Product
+	/// <summary>
+	/// Модель продукта
+	/// </summary>
+	public class Product
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

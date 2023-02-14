@@ -13,10 +13,15 @@ using LittleBasket.Service;
 
 namespace LittleBasket.UI.ViewModels
 {
+    //ViewModel который привязан как DataContext для страницы справочника
     public class ReferenceBookViewModel : ViewModelBase
     {
-        public ReferenceBookListViewModel ReferenceBookListViewModel { get; set; }
+		//DataContext для компонента ReferenceBookList
+        //из папки Components
+		public ReferenceBookListViewModel ReferenceBookListViewModel { get; set; }
 
+
+        //Поле отвечающее за исменения поля ввода для поиска элемента
         private string _searchInput;
         public string SearchInput
         {
@@ -28,8 +33,11 @@ namespace LittleBasket.UI.ViewModels
             }
         }
 
+
+        //Команда навигации на главную страницу
         public ICommand GoToBasketViewModel { get; }
 
+        //Команда добавления нового продукта в бд
         public ICommand AddProductToBookCommand { get; }
 
         public ReferenceBookViewModel(

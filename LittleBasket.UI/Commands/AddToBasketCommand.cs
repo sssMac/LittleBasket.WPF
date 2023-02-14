@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
-    public class AddToBasketCommand : CommandBase
+
+	//Команда добавления продукта в корзину покупки
+	//тригерит ивент ProductAddedToBasket из BasketProductStore
+	public class AddToBasketCommand : CommandBase
     {
         private readonly BasketProductStore _basketProductStore;
         private readonly SelectedBasketProductStore _selectedBasketProductStore;

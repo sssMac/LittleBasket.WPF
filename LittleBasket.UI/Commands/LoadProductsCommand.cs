@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
-    public class LoadProductsCommand : AsyncCommandBase
+	//Команда выгрузки продуктов из бд
+	//тригерит ивент BasketProductsLoaded из BasketProductStore
+	public class LoadProductsCommand : AsyncCommandBase
     {
         private readonly BasketProductStore _basketProductStore;
         public LoadProductsCommand(BasketProductStore basketProductStore)

@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
-    public class LoadHistoryCommand : AsyncCommandBase
+	//Команда выгрузки истории из бд
+	//тригерит ивент BasketHistoryLoaded из BasketHistoryStore
+	public class LoadHistoryCommand : AsyncCommandBase
     {
         private readonly BasketHistoryStore _basketHistoryStore;
 

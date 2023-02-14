@@ -13,14 +13,25 @@ using LittleBasket.UI.Views;
 
 namespace LittleBasket.UI.ViewModels
 {
+    //Класс связывающий BasketView (основная страница)
     public class BasketViewModel : ViewModelBase
     {
-        public BasketProductListViewModel BasketProductListViewModel { get; set; }
-        public BasketHistoryViewModel BasketHistoryViewModel { get; set; }
-        public BasketBuyViewModel BasketBuyViewModel { get; set; }
+		//Данные ViewModel используются для binding как DataContext к следущим компонентам
+		//в папке Components
 
+		//Component: BasketProductList
+		public BasketProductListViewModel BasketProductListViewModel { get; set; }
+		//Component: BasketHistory
+		public BasketHistoryViewModel BasketHistoryViewModel { get; set; }
+		//Component: BasketBuy
+		public BasketBuyViewModel BasketBuyViewModel { get; set; }
+
+
+        //Команды
+        //выгрузки продуктов, истории
         public ICommand LoadProductsCommand { get; }
         public ICommand LoadHistoryCommand { get; }
+        //редирект на страницу со справочником
         public ICommand GoToReferenceBookView { get; }
         public BasketViewModel(
             BasketProductStore basketProductStore,

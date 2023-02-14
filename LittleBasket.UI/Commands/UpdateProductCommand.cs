@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
+    //Команда обновления полей продукта
     public class UpdateProductCommand : IUpdateCommand<Product>
     {
         private readonly BasketProductStore _basketProductStore;

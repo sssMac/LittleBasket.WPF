@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Service.Stores
 {
+    //Хранит в себе текущую страницу
     public class NavigationStore 
     {
+        //Текущая страница
         private ViewModelBase _currentViewModel;
 
         public ViewModelBase CurrentViewModel
@@ -21,16 +23,14 @@ namespace LittleBasket.Service.Stores
             }
         }
 
+        //Ивент на изменение текущей страницы
         public event Action CurrentViewModelChanged;
 
-        private void OnCurrentViewModelChanged()
+		//тригириться при изменении CurrentViewModel и вызывает ивент
+		private void OnCurrentViewModelChanged()
         {
             CurrentViewModelChanged?.Invoke();
         }
 
-        public void ChangeView(ViewModelBase view)
-        {
-            CurrentViewModel = view;
-        }
     }
 }

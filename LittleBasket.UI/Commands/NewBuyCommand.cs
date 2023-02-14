@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
-    public class NewBuyCommand : CommandBase
+	//Команда активации новой покупки
+	//тригерит ивент IsActiveChanged из BasketBuyStore
+	public class NewBuyCommand : CommandBase
     {
         private readonly BasketBuyStore _basketBuyStore;
 

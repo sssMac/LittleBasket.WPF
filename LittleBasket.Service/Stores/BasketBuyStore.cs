@@ -10,15 +10,22 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Service.Stores
 {
+    //Хранилище для общего дуступа к текущей покупки
     public class BasketBuyStore
     {
+        //Используется хранилище продуктов
         private readonly BasketProductStore _basketProductStore;
 
+        //Коллкция продуктов в текущей покупки
         private List<Check>? _cheks;
         public IEnumerable<Check>? Cheks => _cheks;
 
+        //Проверка доступности функции сохранить и сбросить
         public bool IsActive { get; set; }
 
+        //Список доступных событий ->
+        //удалить продукт, сохранить в историю, сброс,
+        //обновить поля, изменить статус текущей покупки
         public event Action<Check> BasketCheckItemDeleted;
         public event Action<List<Check>> BasketCheckSave;
         public event Action BasketCheckReset;
@@ -30,10 +37,11 @@ namespace LittleBasket.Service.Stores
 
             _cheks = new List<Check>();
 
-            _basketProductStore.ProductAddedToBasket += BasketProductStore_ProductAddedToBasket;
+            _basketProductStore.ProductAddedToBasket += OnProductAddedToBasket;
         }
 
-        public void BasketProductStore_ProductAddedToBasket(Product product)
+        //
+        public void OnProductAddedToBasket(Product product)
         {
             if (product != null)
             {

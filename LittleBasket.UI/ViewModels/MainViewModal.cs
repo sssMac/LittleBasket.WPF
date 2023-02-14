@@ -8,9 +8,14 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.ViewModels
 {
-    public class MainViewModal : ViewModelBase
+	//Класс связывающий MainWindow (главное окно)
+	public class MainViewModal : ViewModelBase
     {
+        //Хранилище навигации между страницами
         private readonly NavigationStore _navigationStore;
+
+        //ViewModels страниц на которые можно переключиться, они передаются в curentViewModel
+        //для навигации между страницами
         private readonly BasketViewModel _basketViewModel;
         private readonly ReferenceBookViewModel _referenceBookViewModel;
         public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
@@ -24,7 +29,8 @@ namespace LittleBasket.UI.ViewModels
             _navigationStore.CurrentViewModel = _basketViewModel;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
-
+        
+        //Ивент-подписка: изменяет текущее окно
         private void OnCurrentViewModelChanged()
         {
             OnPropertyChanged(nameof(CurrentViewModel));

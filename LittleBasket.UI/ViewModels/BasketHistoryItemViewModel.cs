@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.ViewModels
 {
-    public class BasketHistoryItemViewModel : ViewModelBase
-    {
+	//Класс отвечающий за элемент из списка историй
+	//DataContext для компонента BasketHistoryItem
+	public class BasketHistoryItemViewModel : ViewModelBase
+	{
+        //Модель использующаяся на UI
         public History History { get; private set; }
 
         public Guid HistoryId => History.Id;

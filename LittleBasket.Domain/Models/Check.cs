@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Domain.Models
 {
-    public class Check
+	/// <summary>
+	/// Модель текущей покупки
+	/// </summary>
+	public class Check
     {
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }

@@ -12,7 +12,10 @@ namespace LittleBasket.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMySqlDatabase(this IServiceCollection services, IConfiguration config)
+		/// <summary>
+		/// Подключение базы данных MySql
+		/// </summary>
+		public static IServiceCollection AddMySqlDatabase(this IServiceCollection services, IConfiguration config)
         {
             services.AddDbContext<ApplicationContext>(options =>
             {
@@ -24,7 +27,10 @@ namespace LittleBasket.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddBasketInfrustructure(this IServiceCollection services)
+		/// <summary>
+		/// Добавление инфраструктуры. Регистрация ряда сервисов
+		/// </summary>
+		public static IServiceCollection AddBasketInfrustructure(this IServiceCollection services)
         {
             services.AddSingleton<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<IBasketService, BasketService>();

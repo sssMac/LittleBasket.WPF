@@ -7,10 +7,11 @@ using System.Windows.Input;
 
 namespace LittleBasket.UI.ViewModels
 {
-    public class BasketBuyItemViewModel : ViewModelBase
-    {
-        private readonly BasketBuyStore _basketBuyStore;
-
+	//Клаас отвещающий за элемент из списка текущей покупки
+	//DataContext для компонента BasketBuyItem
+	public class BasketBuyItemViewModel : ViewModelBase
+	{ 
+        //Модель использующаяся на UI
         private Guid _productId; 
         public Guid ProductId
         {
@@ -56,6 +57,7 @@ namespace LittleBasket.UI.ViewModels
 
         public decimal Sum => Count * Cost;
 
+        //Команда удаления продукта из корзины
         public ICommand DeleteCheckCommand { get; }
 
         public BasketBuyItemViewModel(BasketBuyStore basketBuyStore)
@@ -63,6 +65,7 @@ namespace LittleBasket.UI.ViewModels
             DeleteCheckCommand = new DeleteFromBasketCommand(basketBuyStore);
         }
 
+        //Изменения отдельной группы полей на UI
         public void Update(Check check)
         {
             _productId = check.ProductId;

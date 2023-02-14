@@ -25,7 +25,6 @@ namespace LittleBasket.UI
                     services.AddBasketInfrustructure();
 
                     //Commands
-                    services.AddSingleton<IUpdateCommand<List<Check>>, UpdateCheckCommand>();
                     services.AddSingleton<IUpdateCommand<Product>, UpdateProductCommand>();
 
                     //Stores
@@ -50,14 +49,12 @@ namespace LittleBasket.UI
         {
             await _host!.StartAsync();
 
+            // Загрузку данных из бд
             _host.Services.GetRequiredService<BasketViewModel>().LoadProductsCommand.Execute(null);
             _host.Services.GetRequiredService<BasketViewModel>().LoadHistoryCommand.Execute(null);
 
-
             var startupForm = _host.Services.GetRequiredService<MainWindow>();
             startupForm.Show();
-
-
 
             base.OnStartup(e);
         }

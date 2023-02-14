@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Service
 {
+    //Сервис управления бд через UnitOfWork
     public class BasketService : IBasketService
     {
         private IUnitOfWork _unitOfWork;
@@ -19,16 +20,19 @@ namespace LittleBasket.Service
             _unitOfWork = unitOfWork;
         }
 
+        //получить продкты
         public async Task<IEnumerable<Product>> GetProducts()
         {
             return await _unitOfWork.ProductRepository.Get();
         }
 
+        //получить историю
         public async Task<IEnumerable<History>> GetHistory()
         {
             return await _unitOfWork.HistoryRepository.Get(null,null,"Checks");
         }
 
+        //добавить новый продукт 
         public async Task AddProduct(Guid id,string name)
         {
             var product = new Product
@@ -42,6 +46,7 @@ namespace LittleBasket.Service
             await _unitOfWork.Save();
         }
 
+        //добавить новую историю
         public async Task AddHistory(List<AddChek> addChecks)
         {
             var checks = new List<Check>();
@@ -74,6 +79,7 @@ namespace LittleBasket.Service
             await _unitOfWork.Save();
         }
 
+        //изменить видимость продукта
         public async Task ChangeVisibility(Guid productId, bool isVisible)
         {
             var product = (await _unitOfWork.ProductRepository.Get(x => x.Id == productId)).First();

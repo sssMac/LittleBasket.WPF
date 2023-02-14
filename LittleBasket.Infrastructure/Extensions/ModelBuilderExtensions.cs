@@ -10,7 +10,10 @@ namespace LittleBasket.Infrastructure.Extensions
 {
     public static class ModelBuilderExtension
     {
-        public static void Seed(this ModelBuilder builder)
+		/// <summary>
+		/// Пресоздает данные в бд
+		/// </summary>
+		public static void Seed(this ModelBuilder builder)
         {
             var products = new List<Product>
             {

@@ -6,6 +6,7 @@ using System;
 
 namespace LittleBasket.Service
 {
+    //Сервис контроля текущей страницы
     public class NavigationService<TViewModel> where TViewModel : ViewModelBase
     {
         private readonly NavigationStore _navigationStore;
@@ -17,7 +18,8 @@ namespace LittleBasket.Service
             _createViewModel = createViewModel;
         }
 
-        public void Navigate()
+		//Редирект на тип страницы который создает "Func<TViewModel> createViewModel"
+		public void Navigate()
         {
             _navigationStore.CurrentViewModel = _createViewModel();
         }

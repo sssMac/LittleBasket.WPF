@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
-    public class DeleteFromBasketCommand : CommandBase
+	//Команда удаления продукта из корзины покупки
+	//тригерит ивент BasketCheckItemDeleted из BasketBuyStore
+	public class DeleteFromBasketCommand : CommandBase
     {
         private readonly BasketBuyStore _basketBuyStore;
         public DeleteFromBasketCommand(BasketBuyStore basketBuyStore)

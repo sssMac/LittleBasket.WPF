@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.ViewModels
 {
+    //Класс отвечающий за элемент в списке продуктов в справочнике
     public class ReferenceBookListItemViewModel : ViewModelBase
     {
+        //Модель для UI
         public Product Product { get; set; }
         public Guid ProductId => Product.Id;
         public string ProductName => Product.Name;
@@ -30,6 +32,7 @@ namespace LittleBasket.UI.ViewModels
             }
         }
 
+        //Команда изменяющая поле продекта, в нашем случаее его видимость на главной
         public IUpdateCommand<Product> UpdateProductCommand { get; }
 
         public ReferenceBookListItemViewModel(Product product, IUpdateCommand<Product> updateProductCommand)

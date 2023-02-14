@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
-    public class SaveCheckToHistoryCommand : AsyncCommandBase
+	//Команда сохранения текущей покупки в историю
+	//тригерит ивент BasketCheckSave из BasketBuyStore
+	public class SaveCheckToHistoryCommand : AsyncCommandBase
     {
         private readonly BasketBuyStore _basketBuyStore;
         private readonly ObservableCollection<BasketBuyItemViewModel> _basketBuyItemViewModel;
@@ -41,7 +43,10 @@ namespace LittleBasket.UI.Commands
             });
             try
             {
+                //сохранения выставленных параметров в карзине(цена, количество)
                 await _basketBuyStore.UpdateCheck(cheks);
+
+                //сохранение в историю
                 await _basketBuyStore.SaveCheck();
 
             }

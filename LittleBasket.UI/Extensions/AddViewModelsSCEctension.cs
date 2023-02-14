@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Extensions
 {
+    
     public static class AddViewModelsSCEctension
     {
+        //Регистрация всех viewModels, не все классы пришлось использовать для DI
         public static IServiceCollection AddViewModels(this IServiceCollection services)
         {
             services.AddSingleton<BasketBuyItemViewModel>();
@@ -26,7 +28,8 @@ namespace LittleBasket.UI.Extensions
             services.AddSingleton<BasketViewModel>();
             services.AddSingleton<MainViewModal>();
 
-            //Navigation
+            
+            //Регистрация сервиса навигации
             services.AddSingleton<Func<BasketViewModel>>((s) => () => s.GetRequiredService<BasketViewModel>());
             services.AddSingleton<NavigationService<BasketViewModel>>();
 

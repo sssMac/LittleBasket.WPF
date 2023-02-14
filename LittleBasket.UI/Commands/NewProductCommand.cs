@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.UI.Commands
 {
-    public class NewProductCommand : AsyncCommandBase
+	//Команда добавления нового продукта
+	//тригерит ивент ProductAdded из BasketProductStore
+	public class NewProductCommand : AsyncCommandBase
     {
         private readonly BasketProductStore _basketProductStore;
 
