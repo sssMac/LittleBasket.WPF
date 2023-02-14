@@ -26,14 +26,18 @@ namespace LittleBasket.UI.ViewModels
         public DateTime CheckDate
         {
             get { return _checkDate; }
-            set { _checkDate = value; }
+            set 
+            {
+                _checkDate = value;
+                OnPropertyChanged(nameof(CheckDate));
+            }
         }
 
         //Лист текущей покупки
         private readonly ObservableCollection<BasketBuyItemViewModel> _basketBuyItemViewModels;
         public IEnumerable<BasketBuyItemViewModel> BasketBuyItemViewModels => _basketBuyItemViewModels;
 
-        //Команды для удаления и сохрания покупки в историю
+        //Команды для сброса и сохрания покупки в историю
         public ICommand DeleteAllCheckCommand { get; }
         public ICommand SaveCheckToHistoryCommand { get; }
 
@@ -64,13 +68,24 @@ namespace LittleBasket.UI.ViewModels
             _basketBuyStore.CheckUpdated += OnCheckUpdated;
             _basketBuyStore.BasketCheckItemDeleted += OnBasketCheckItemDeleted;
             _basketBuyStore.BasketCheckReset += OnBasketCheckReset;
+			_basketBuyStore.SetItemFromHistory += OnSetItemFromHistory;
 
-            _basketBuyStore.IsActiveChanged += OnActiveChanged;
+			_basketBuyStore.IsActiveChanged += OnActiveChanged;
 
         }
 
-        //Ивент-подписка: активация покупки
-        private void OnActiveChanged(bool obj)
+		private void OnSetItemFromHistory()
+		{
+            CheckDate = _basketBuyStore.CheckDate;
+            _basketBuyStore.Cheks.ToList().ForEach(c =>
+            {
+                _basketBuyItemViewModels.Add(new BasketBuyItemViewModel(_basketBuyStore, c));
+
+            });
+		}
+
+		//Ивент-подписка: активация покупки
+		private void OnActiveChanged(bool obj)
         {
             _isActiveBuy = obj;
             OnPropertyChanged(nameof(IsActiveBuy));
@@ -115,13 +130,13 @@ namespace LittleBasket.UI.ViewModels
                     return;
                 }
 
-                _basketBuyItemViewModels?.Add(new BasketBuyItemViewModel(_basketBuyStore)
+                _basketBuyItemViewModels?.Add(new BasketBuyItemViewModel(_basketBuyStore, new Check
                 {
-                    ProductId = product.Id,
-                    ProductName = product.Name,
-                    Cost = 0,
-                    Count = 1
-                });
+					ProductId = product.Id,
+					ProductName = product.Name,
+					Cost = 0,
+					Count = 1
+				}));
             }
         }
 

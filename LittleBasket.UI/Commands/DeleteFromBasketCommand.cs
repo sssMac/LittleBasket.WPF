@@ -18,18 +18,18 @@ namespace LittleBasket.UI.Commands
             _basketBuyStore = basketBuyStore;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             try
             {
                 if(parameter is string)
                 {
-                    await _basketBuyStore.DeleteCheckItem(parameter.ToString());
+                    _basketBuyStore.DeleteCheckItem(parameter.ToString());
 
                 }
                 else if(parameter == null){
-                    await _basketBuyStore.ResetCheck();
-                }
+                    _basketBuyStore.ResetCheck();
+				}
 
             }
             catch (Exception)

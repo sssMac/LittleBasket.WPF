@@ -42,8 +42,9 @@
                 BorderThickness="0"
                 ItemsSource="{Binding Checks}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                HorizontalContentAlignment="Stretch"
-                SelectionMode="Single">
+                Focusable="false"
+                IsHitTestVisible="false"
+                HorizontalContentAlignment="Stretch">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <Border Padding="0 10" TextBlock.FontSize="16">

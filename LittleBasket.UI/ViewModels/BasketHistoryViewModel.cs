@@ -27,33 +27,68 @@ namespace LittleBasket.UI.ViewModels
         private readonly ObservableCollection<BasketHistoryItemViewModel> _basketHistoryItemViewModels;
         public IEnumerable<BasketHistoryItemViewModel> BasketHistoryItemViewModels => _basketHistoryItemViewModels;
 
-        //Команда активации новой покупки
-        public ICommand NewBuyCommand { get; }
-        public BasketHistoryViewModel(BasketBuyStore basketBuyStore, BasketHistoryStore basketHistoryStore)
+		private BasketHistoryItemViewModel _selectedBasketHistoryItemViewModel;
+		public BasketHistoryItemViewModel SelectedBasketHistoryItemViewModel
+		{
+			get
+			{
+				return _selectedBasketHistoryItemViewModel;
+			}
+			set
+			{
+				_selectedBasketHistoryItemViewModel = value;
+				OnPropertyChanged(nameof(SelectedBasketHistoryItemViewModel));
+                if (!_isActiveBuy)
+                {
+					SetHistoryItemCommand.Execute(_selectedBasketHistoryItemViewModel.History);
+					SetEditModeCommand.Execute(SelectedBasketHistoryItemViewModel.HistoryId);
+				}
+			}
+		}
+
+		//Команда активации новой покупки
+		public ICommand NewBuyCommand { get; }
+        public ICommand SetHistoryItemCommand { get; }
+		public ICommand SetEditModeCommand { get; }
+
+		//Проверка на доступность к добавлению товаров в корзину
+		private bool _isActiveBuy;
+		public bool IsActiveBuy
+		{
+			get { return _isActiveBuy; }
+			set
+			{
+				_isActiveBuy = value;
+			}
+		}
+		public bool InverseActiveBuy => !_isActiveBuy;
+		public BasketHistoryViewModel(BasketBuyStore basketBuyStore, BasketHistoryStore basketHistoryStore)
         {
             _basketBuyStore = basketBuyStore;
             _basketHistoryStore = basketHistoryStore;
 
             _basketHistoryItemViewModels = new ObservableCollection<BasketHistoryItemViewModel>();
-            NewBuyCommand = new NewBuyCommand(basketBuyStore);
+            NewBuyCommand = new NewBuyCommand(_basketBuyStore);
+            SetHistoryItemCommand = new SetHistoryToBuyCommand(_basketBuyStore, _basketHistoryStore);
+			SetEditModeCommand = new SetEditModeCommand(_basketBuyStore) ;
+			//Подписки
+			_basketHistoryStore.BasketHistoryLoaded += OnHistoryLoaded;
+			_basketHistoryStore.HistoryUpdated += OnHistoryUpdated;
+			_basketBuyStore.IsActiveChanged += OnActiveChanged;
 
-            //Подписки
-            _basketHistoryStore.BasketHistoryLoaded += OnHistoryLoaded;
-            _basketBuyStore.BasketCheckSave += OnAddedToHistory;
+		}
 
-        }
+		//Ивент-подписка: обновление истории при изменении или сохранении
+		private void OnHistoryUpdated(History history)
+		{
+			var isExist = _basketHistoryItemViewModels.FirstOrDefault(x => x.HistoryId == history.Id);
+			if (isExist != null)
+			{
+				_basketHistoryItemViewModels.Remove(isExist);
+			}
+			_basketHistoryItemViewModels.Insert(0, new BasketHistoryItemViewModel(history));
+		}
 
-		//Ивент-подписка: добавление в историю новой сохраненой покупки
-		private void OnAddedToHistory(List<Check> cheks)
-        {
-
-            _basketHistoryItemViewModels.Insert(0, new BasketHistoryItemViewModel(new History
-            {
-                Date = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
-                Checks = cheks,
-                Sum = Sum(cheks)
-            }));
-        }
 
         //Ивент-подписка: загрузка истории из бд
         private void OnHistoryLoaded()
@@ -68,13 +103,22 @@ namespace LittleBasket.UI.ViewModels
  
         }
 
-        //Отписка от событий
-        protected override void Dispose()
+		//Ивента: изменение поля isActive, вкл/выкл функции "добавить в корзину"
+		private void OnActiveChanged(bool obj)
+		{
+			_isActiveBuy = obj;
+
+			OnPropertyChanged(nameof(IsActiveBuy));
+			OnPropertyChanged(nameof(InverseActiveBuy));
+		}
+		//Отписка от событий
+		protected override void Dispose()
         {
             _basketHistoryStore.BasketHistoryLoaded -= OnHistoryLoaded;
-            _basketBuyStore.BasketCheckSave -= OnAddedToHistory;
+			_basketHistoryStore.HistoryUpdated -= OnHistoryUpdated;
+			_basketBuyStore.IsActiveChanged -= OnActiveChanged;
 
-            base.Dispose();
+			base.Dispose();
         }
 
         private decimal Sum(List<Check> cheks)

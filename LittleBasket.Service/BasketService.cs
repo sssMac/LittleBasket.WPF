@@ -47,12 +47,12 @@ namespace LittleBasket.Service
         }
 
         //добавить новую историю
-        public async Task AddHistory(List<AddChek> addChecks)
+        public async Task AddHistory(Guid id, List<AddChek> addChecks)
         {
             var checks = new List<Check>();
             var history = new History
             {
-                Id = Guid.NewGuid(),
+                Id = id,
                 Date = DateTimeOffset.Now.ToUnixTimeMilliseconds()
             };
 
@@ -89,6 +89,24 @@ namespace LittleBasket.Service
             }
 
             await _unitOfWork.Save();
+        }
+
+        public async Task EditHistory(Guid id, List<Check> cheks)
+        {
+            var history = (await _unitOfWork.HistoryRepository.Get(x => x.Id == id)).FirstOrDefault();
+            if (history != null)
+            {
+                var sum = 0M;
+				cheks.ForEach(che =>
+				{
+					sum += che.Count * che.Cost;
+				});
+
+                history.Sum = sum;
+				history.Date = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+				history.Checks = cheks;
+                await _unitOfWork.Save();
+            }
         }
 
     }

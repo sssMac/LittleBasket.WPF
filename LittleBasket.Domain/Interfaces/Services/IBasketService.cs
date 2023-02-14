@@ -13,7 +13,8 @@ namespace LittleBasket.Domain.Interfaces.Services
         Task<IEnumerable<Product>> GetProducts();
         Task<IEnumerable<History>> GetHistory();
         Task AddProduct(Guid id,string name);
-        Task AddHistory(List<AddChek> addChecks);
+        Task AddHistory(Guid id, List<AddChek> addChecks);
         Task ChangeVisibility(Guid productId, bool isVisible);
+        Task EditHistory(Guid id, List<Check> cheks);
     }
 }

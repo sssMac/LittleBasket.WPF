@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LittleBasket.UI.Components"
+             xmlns:converters="clr-namespace:LittleBasket.Infrastructure.Converters;assembly=LittleBasket.Infrastructure"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -25,7 +26,9 @@
                     BorderThickness="0"
                     HorizontalContentAlignment="Stretch"
                     ItemsSource="{Binding BasketHistoryItemViewModels}"
+                    SelectedItem="{Binding SelectedBasketHistoryItemViewModel}"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Panel.ZIndex="99"
                     SelectionMode="Single">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -38,6 +41,7 @@
                         Grid.Column="1"
                         MaxWidth="200"
                         Command="{Binding NewBuyCommand}"
+                        IsEnabled="{Binding InverseActiveBuy}"
                         Content="Новая покупка"
                         >
                     </Button>

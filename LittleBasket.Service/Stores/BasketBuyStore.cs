@@ -13,15 +13,24 @@ namespace LittleBasket.Service.Stores
     //Хранилище для общего дуступа к текущей покупки
     public class BasketBuyStore
     {
-        //Используется хранилище продуктов
+        //Используется хранилище продуктов и историй
         private readonly BasketProductStore _basketProductStore;
+        private readonly BasketHistoryStore _basketHistoryStore;
 
-        //Коллкция продуктов в текущей покупки
-        private List<Check>? _cheks;
+		//Коллкция продуктов в текущей покупки
+		private List<Check>? _cheks;
         public IEnumerable<Check>? Cheks => _cheks;
+        public DateTime CheckDate { get; set; }
 
-        //Проверка доступности функции сохранить и сбросить
+
+        //Проверка доступности функции сохранить и сбросить, редактировать
         public bool IsActive { get; set; }
+
+        //Проверка на режим редактирования
+        //активируется при просмотре чека из истории
+        public bool IsEditMode { get; set; }
+        public Guid IDofEditedHistory { get; set; }
+
 
         //Список доступных событий ->
         //удалить продукт, сохранить в историю, сброс,
@@ -31,17 +40,25 @@ namespace LittleBasket.Service.Stores
         public event Action BasketCheckReset;
         public event Action<Check> CheckUpdated;
         public event Action<bool> IsActiveChanged;
+		public event Action SetItemFromHistory;
+        public event Action<Guid, List<Check>> HistoryItemUpdated;
         public BasketBuyStore(BasketProductStore basketProductStore)
         {
             _basketProductStore = basketProductStore;
 
-            _cheks = new List<Check>();
+			_cheks = new List<Check>();
 
             _basketProductStore.ProductAddedToBasket += OnProductAddedToBasket;
         }
 
-        //
-        public void OnProductAddedToBasket(Product product)
+		public void EditModeChanged(Guid id)
+		{
+			IsEditMode = true;
+            IDofEditedHistory = id;
+		}
+
+		//Ивент-подписка: добавляет продукт из списка продуктов в корзину
+		public void OnProductAddedToBasket(Product product)
         {
             if (product != null)
             {
@@ -56,8 +73,11 @@ namespace LittleBasket.Service.Stores
                 _cheks.Add(check);
             }
         }
-
-        public async Task DeleteCheckItem(string productName)
+        
+        //Блок методов который тригирит свой ивент
+        //Вызываются из определенных команд
+        //Надеюсь из названия все понятно
+		public void DeleteCheckItem(string productName)
         {
             var check = _cheks.FirstOrDefault(c => c.ProductName == productName);
 
@@ -69,24 +89,32 @@ namespace LittleBasket.Service.Stores
             {
                 IsActive = false;
                 IsActiveChanged?.Invoke(IsActive);
-            }
-        }
+				_basketHistoryStore.ChangeEditMode(false);
 
-        public async Task ResetCheck()
+			}
+		}
+
+        public void ResetCheck()
         {
-            _cheks.Clear();
+            _cheks = null;
             IsActive = false;
             IsActiveChanged?.Invoke(IsActive);
             BasketCheckReset?.Invoke();
-        }
+            IsEditMode = false;
 
-        public async Task SaveCheck()
+		}
+
+		public async Task SaveCheck()
         {
-
-            if (!_cheks.Equals(null))
+            if(!_cheks.Equals(null) && IsEditMode)
+            {
+                HistoryItemUpdated?.Invoke(IDofEditedHistory, _cheks);
+            }
+            else if (!_cheks.Equals(null))
             {
                 BasketCheckSave?.Invoke(_cheks);
             }
+            ResetCheck();
         }
 
         public async Task UpdateCheck(List<Check> checks)
@@ -110,7 +138,15 @@ namespace LittleBasket.Service.Stores
             });
         }
 
-        public async Task NewBuy()
+        public void SetItemHistory(List<Check> checks, long date)
+        {
+            CheckDate = DateTimeOffset.FromUnixTimeMilliseconds(date).LocalDateTime;
+            _cheks = checks;
+			SetItemFromHistory?.Invoke();
+            NewBuy();
+
+		}
+        public void NewBuy()
         {
             IsActive = true;
             IsActiveChanged?.Invoke(IsActive);

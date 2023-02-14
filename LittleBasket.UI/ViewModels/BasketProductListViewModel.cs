@@ -72,8 +72,10 @@ namespace LittleBasket.UI.ViewModels
             _basketProductStore.ProductAdded += OnProductAdded;
         }
 
-        //Ивент-подписка: добавление нового продукта в список
-        private void OnProductAdded(Product obj)
+		
+
+		//Ивент-подписка: добавление нового продукта в список
+		private void OnProductAdded(Product obj)
         {
             _basketProductListItemViewModels.Add(new BasketProductListItemViewModel(obj));
             _basketProductListItemViewModels.OrderBy(x => x);

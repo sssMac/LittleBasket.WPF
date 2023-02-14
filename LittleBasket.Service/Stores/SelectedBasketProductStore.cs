@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace LittleBasket.Service.Stores
 {
-    //Хранилище выбранного продукта, сейчас +- бесполезно
+    //Хранилище выбранного продукта
+    //было одно из пробных, для этого проекта считаю его +- бесполезным
     public class SelectedBasketProductStore
     {
 
